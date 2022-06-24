@@ -4,3 +4,5 @@ def helloword():
 
 if __name__ == '__main__':
     helloword()
+    helloword()
+    helloword()
