@@ -1,0 +1,4 @@
+credentials.txt
+squid/squid.passwd
+__pycache__/
+.idea

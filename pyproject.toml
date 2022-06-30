@@ -6,6 +6,7 @@ authors = ["weifan <p988744@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+docker = "^5.0.3"
 
 [tool.poetry.dev-dependencies]
 
