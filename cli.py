@@ -27,19 +27,25 @@ def host_info():
 @cli.command()
 @click.argument("config_name", default="all")
 def start(config_name: str = 'all'):
-    create_services(config_name)
+    if config_name == 'all':
+        config_name = None
+    create_services([config_name])
 
 
 @cli.command()
 @click.argument("config_name", default="all")
 def stop(config_name: str = 'all'):
-    stop_services(config_name)
+    if config_name == 'all':
+        config_name = None
+    stop_services([config_name])
 
 
 @cli.command()
 @click.argument("config_name", default="all")
 def restart(config_name: str = 'all'):
-    restart_services(config_name)
+    if config_name == 'all':
+        config_name = None
+    restart_services([config_name])
 
 
 if __name__ == '__main__':

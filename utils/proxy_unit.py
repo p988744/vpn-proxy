@@ -9,17 +9,6 @@ from utils.docker import docker_client
 logger = logging.getLogger(__name__)
 
 
-def get_proxy_units(name=None):
-    units_conf = settings.get_proxy_configs()
-    if name and name != 'all':
-        config = units_conf.get(name)
-        assert config, f"proxy config {name} not found"
-        yield ProxyUnit(name, **config)
-    else:
-        for name, unit_conf in units_conf.items():
-            yield ProxyUnit(name, **unit_conf)
-
-
 class ProxyUnit(ABC):
     base_dir = settings.BASE_DIR
     vpn_image = 'ilteoood/docker-surfshark'
