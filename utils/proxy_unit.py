@@ -14,12 +14,12 @@ class ProxyUnit(ABC):
     vpn_image = 'ilteoood/docker-surfshark'
     squid_image = 'sameersbn/squid:3.5.27-2'
 
-    def __init__(self, name, surfshark_user, surfshark_password, surfshark_country='us', surfshark_city='nyc',
+    def __init__(self, name, surfshark_user, surfshark_password, country='us', city='nyc',
                  connection_type='udp', expose_port=3128):
         self.surfshark_user = surfshark_user
         self.surfshark_password = surfshark_password
-        self.surfshark_country = surfshark_country
-        self.surfshark_city = surfshark_city
+        self.country = country
+        self.city = city
         self.connection_type = connection_type
         self.expose_port = expose_port
         self.name = name
@@ -32,17 +32,17 @@ class ProxyUnit(ABC):
             'name': self.name,
             'status': self.status,
             'vpn_container': {
-                'id': self.vpn_container.id if self.vpn_container else 'not found',
+                'id': self.vpn_container.id if self.vpn_container else None,
                 'name': self.vpn_container_name,
-                'status': self.vpn_container.status if self.vpn_container else 'not found',
+                'status': self.vpn_container.status if self.vpn_container else 'NOT_STARTED',
             },
             'squid_container': {
-                'id': self.squid_container.id if self.squid_container else 'not found',
+                'id': self.squid_container.id if self.squid_container else None,
                 'name': self.squid_container_name,
-                'status': self.squid_container.status if self.squid_container else 'not found',
+                'status': self.squid_container.status if self.squid_container else 'NOT_STARTED',
             },
-            'country': self.surfshark_country,
-            'city': self.surfshark_city,
+            'country': self.country,
+            'city': self.city,
             'expose_port': self.expose_port,
             'connection_type': self.connection_type,
         }
@@ -52,8 +52,8 @@ class ProxyUnit(ABC):
         return {
             "SURFSHARK_USER": self.surfshark_user,
             "SURFSHARK_PASSWORD": self.surfshark_password,
-            "SURFSHARK_COUNTRY": self.surfshark_country,
-            "SURFSHARK_CITY": self.surfshark_city,
+            "SURFSHARK_COUNTRY": self.country,
+            "SURFSHARK_CITY": self.city,
             "CONNECTION_TYPE": self.connection_type,
         }
 
@@ -73,7 +73,7 @@ class ProxyUnit(ABC):
             else:
                 return 'stopped'
         else:
-            return 'not found'
+            return 'NOT_STARTED'
 
     # create docker container with name and volume
     def create_vpn_container(self, *, client=None, detach=True,
@@ -171,7 +171,7 @@ class ProxyUnit(ABC):
             except docker.errors.APIError:
                 pass
         else:
-            logger.info(f"vpn container {self.vpn_container_name} not found")
+            logger.info(f"vpn container {self.vpn_container_name} NOT_STARTED")
 
     def stop_squid_service(self):
         logger.info("stopping squid service...")
@@ -185,7 +185,7 @@ class ProxyUnit(ABC):
             except docker.errors.APIError:
                 pass
         else:
-            logger.info(f"squid container {self.squid_container_name} not found")
+            logger.info(f"squid container {self.squid_container_name} NOT_STARTED")
 
     def restart_vpn_service(self):
         logger.info("restarting vpn service...")

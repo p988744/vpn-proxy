@@ -2,7 +2,11 @@ import uvicorn
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
+from db import models
+from db.database import engine, SessionLocal
 from service.routers import api_router
+
+models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     contact={

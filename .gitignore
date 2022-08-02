@@ -3,3 +3,5 @@ squid/squid.passwd
 __pycache__/
 .idea
 .env*
+venv/
+**/*.db

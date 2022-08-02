@@ -1,7 +1,6 @@
 import click
 
-from crud.proxies import create_services, stop_services, restart_services
-from utils.proxy_unit import get_proxy_units
+from db.crud.proxies import create_service, stop_service, restart_service, get_proxy_units
 from utils.utils import get_my_ip, get_my_country_code, get_local_ip
 
 
@@ -29,7 +28,7 @@ def host_info():
 def start(config_name: str = 'all'):
     if config_name == 'all':
         config_name = None
-    create_services([config_name])
+    create_service([config_name])
 
 
 @cli.command()
@@ -37,7 +36,7 @@ def start(config_name: str = 'all'):
 def stop(config_name: str = 'all'):
     if config_name == 'all':
         config_name = None
-    stop_services([config_name])
+    stop_service([config_name])
 
 
 @cli.command()
@@ -45,7 +44,7 @@ def stop(config_name: str = 'all'):
 def restart(config_name: str = 'all'):
     if config_name == 'all':
         config_name = None
-    restart_services([config_name])
+    restart_service([config_name])
 
 
 if __name__ == '__main__':
