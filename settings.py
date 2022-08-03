@@ -25,7 +25,6 @@ class Settings(BaseSettings):
     SURFSHARK_PASSWORD: Optional[str] = None
     CONNECTION_TYPE: str = 'udp'
     CONTAINER_PREFIX: str = 'proxy-'
-    PROXY_UNIT_CONFIG_FILE: str = 'proxy_units.yml'
     SQLALCHEMY_DATABASE_URL: str = "sqlite:///./sql_app.db"
     # SQLALCHEMY_DATABASE_URL = "postgresql://user:password@postgresserver/db"
 
