@@ -26,6 +26,8 @@ class Settings(BaseSettings):
     CONNECTION_TYPE: str = 'udp'
     CONTAINER_PREFIX: str = 'proxy-'
     PROXY_UNIT_CONFIG_FILE: str = 'proxy_units.yml'
+    SQLALCHEMY_DATABASE_URL: str = "sqlite:///./sql_app.db"
+    # SQLALCHEMY_DATABASE_URL = "postgresql://user:password@postgresserver/db"
 
     class Config:
         env_file = '.env'
@@ -37,30 +39,4 @@ def create_settings():
     return Settings()
 
 
-def parse_unit_configs():
-    with open(settings.PROXY_UNIT_CONFIG_FILE, 'r') as f:
-        configs = yaml.load(f, Loader=Loader)
-    proxy_units = configs
-    return {
-        name: {
-            "surfshark_user": settings.SURFSHARK_USER,
-            "surfshark_password": settings.SURFSHARK_PASSWORD,
-            "surfshark_country": unit_conf.get('surfshark_country'),
-            "surfshark_city": unit_conf.get('surfshark_city'),
-            "connection_type": settings.CONNECTION_TYPE,
-            "expose_port": unit_conf.get('expose_port'),
-        } for name, unit_conf in proxy_units.items()}
-
-
-def get_proxy_configs(reload=False) -> Dict:
-    global PROXY_CONFIGS
-    if reload or PROXY_CONFIGS is None:
-        PROXY_CONFIGS = parse_unit_configs()
-    return PROXY_CONFIGS
-
-
 settings = create_settings()
-PROXY_CONFIGS = get_proxy_configs(reload=True)
-
-if __name__ == '__main__':
-    print(get_proxy_configs(reload=True))
