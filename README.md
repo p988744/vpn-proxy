@@ -19,12 +19,14 @@ in docker containers.
 
 ## Configure
 
+### settings
 Recommend to use `dotenv` to set configuration instead of editing `settings.py`.
 You can find some example in `.env.example`
 
 ## Usage
 
-You can find API documentation in the root of service page. (i.e. `http://localhost:8080/`)
+1. Run `poetry run python web_apis.py`
+2. You can find API documentation in the root of service page. (i.e. `http://localhost:8080/`)
 
 ## Contributing
 
