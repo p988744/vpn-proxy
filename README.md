@@ -22,7 +22,9 @@ in docker containers.
 ### settings
 Recommend to use `dotenv` to set configuration instead of editing `settings.py`.
 You can find some example in `.env.example`
-
+### Squid Proxy Server
+You can find squid config in `squid/squid.conf`. Then you can create `squid.passwd` for authentication.
+You can do more container configuration in `utils/proxy_utils.py`.
 ## Usage
 
 1. Run `poetry run python web_apis.py`
