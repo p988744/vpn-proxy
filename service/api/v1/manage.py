@@ -58,7 +58,10 @@ async def get_proxies(db: Session = Depends(get_db)):
 @router.get("/proxies/{config_name}", tags=["units manage"],
             description="get proxy info by config name")
 async def get_proxy(config_name: str, db: Session = Depends(get_db)):
-    return proxies_crud.get_proxy_unit(db, config_name=config_name).__str__()
+    db_proxy_unit = proxies_crud.get_proxy_unit(db, config_name=config_name)
+    if db_proxy_unit is None:
+        raise HTTPException(status_code=404, detail="Proxy unit not found")
+    return db_proxy_unit.__str__()
 
 
 @router.post("/proxies/start/{config_name}", tags=["units manage"],

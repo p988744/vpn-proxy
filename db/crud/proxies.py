@@ -50,7 +50,7 @@ def create_proxy_config(db: Session, proxy_config: schemas.ProxyConfigCreate):
 
 
 def get_proxy_unit(db: Session, config_name: str):
-    db_config = schemas.ProxyConfig.from_orm(get_proxy_config(db, config_name))
+    db_config = get_proxy_config(db, config_name)
     if db_config is None:
         return None
     db_config = schemas.ProxyConfig.from_orm(db_config)
