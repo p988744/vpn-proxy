@@ -122,7 +122,7 @@ class ProxyUnit(ABC):
                                               detach=detach,
                                               volumes=[f'{self.base_dir}/squid/squid.conf:/etc/squid/squid.conf',
                                                        f'{self.base_dir}/squid/squid.passwd:/etc/squid/passwd',
-                                                       f'{self.base_dir}/squid/:/var/spool/squid'],
+                                                       f'{self.base_dir}/{self.squid_container_name}/squid/:/var/spool/squid'],
                                               network_mode=f"container:{self.vpn_container.name}")
             logger.info(f"...start squid container successfully, expose port: {self.expose_port}")
             self.squid_container = container
