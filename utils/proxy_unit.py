@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 class ProxyUnit(ABC):
     base_dir = settings.BASE_DIR
-    vpn_image = 'ilteoood/docker-surfshark'
+    vpn_image = 'qmcgaw/gluetun'
     squid_image = 'sameersbn/squid:3.5.27-2'
 
     def __init__(self, name, surfshark_user, surfshark_password, country='us', city='nyc',
@@ -50,10 +50,13 @@ class ProxyUnit(ABC):
     @property
     def surfshark_config(self):
         return {
-            "SURFSHARK_USER": self.surfshark_user,
-            "SURFSHARK_PASSWORD": self.surfshark_password,
-            "SURFSHARK_COUNTRY": self.country,
-            "SURFSHARK_CITY": self.city,
+            "VPN_SERVICE_PROVIDER": "surfshark",
+            "VPN_TYPE": "openvpn",
+            "OPENVPN_USER": self.surfshark_user,
+            "OPENVPN_PASSWORD": self.surfshark_password,
+            # "SERVER_REGIONS": self.region,
+            "SERVER_COUNTRIES": self.country,
+            "SERVER_CITIES": self.city,
             "CONNECTION_TYPE": self.connection_type,
         }
 
@@ -86,11 +89,13 @@ class ProxyUnit(ABC):
 
         if self.vpn_container is None:
             logger.info("...starting vpn container...")
-            container = client.containers.run(image=self.vpn_image, name=self.vpn_container_name,
+            container = client.containers.run(image=self.vpn_image,
+                                              name=self.vpn_container_name,
                                               cap_add=['NET_ADMIN'],
-                                              ports={'3128/tcp': self.expose_port},
-                                              devices=['/dev/net/tun'], detach=detach,
+                                              ports={'3128/tcp': self.expose_port, '3128/udp': self.expose_port},
+                                              detach=detach,
                                               dns=['surfshark.com', '8.8.8.8'],
+                                              # network='proxy-network',
                                               environment=environments)
 
             logger.info("...start vpn container successfully")
@@ -122,7 +127,7 @@ class ProxyUnit(ABC):
                                               detach=detach,
                                               volumes=[f'{self.base_dir}/squid/squid.conf:/etc/squid/squid.conf',
                                                        f'{self.base_dir}/squid/squid.passwd:/etc/squid/passwd',
-                                                       f'{self.base_dir}/{self.squid_container_name}/squid/:/var/spool/squid'],
+                                                       f'{self.base_dir}/squid/{self.squid_container_name}/:/var/spool/squid'],
                                               network_mode=f"container:{self.vpn_container.name}")
             logger.info(f"...start squid container successfully, expose port: {self.expose_port}")
             self.squid_container = container

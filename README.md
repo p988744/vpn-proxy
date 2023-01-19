@@ -26,9 +26,11 @@ You can find some example in `.env.example`
 You can find squid config in `squid/squid.conf`. Then you can create `squid.passwd` for authentication.
 You can do more container configuration in `utils/proxy_utils.py`.
 ## Usage
-
 1. Run `poetry run python web_apis.py`
 2. You can find API documentation in the root of service page. (i.e. `http://localhost:8080/`)
+
+## VPN Country List
+https://github.com/qdm12/gluetun/wiki/Surfshark
 
 ## Contributing
 

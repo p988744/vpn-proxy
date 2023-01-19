@@ -67,17 +67,17 @@ if [ "$do_deploy" = true ]; then
   # create virtualenv and install python dependencies
   ssh "$target_user@$target_server" "cd $target_path && python3 -m venv venv && source venv/bin/activate && pip install -r requirements.txt"
 
-  # stop previous uvicorn process if any service is running can be found in process list
-  if ssh "$target_user@$target_server" "ps -ef | grep uvicorn | grep -v grep"; then
-    echo "stopping previous uvicorn process"
-    ssh "$target_user@$target_server" "pkill -f uvicorn"
-  fi
-
-  # close tmux session if any session is exist
-  if ssh "$target_user@$target_server" "tmux ls | grep vpn-proxy"; then
-    echo "closing previous tmux session"
-    ssh "$target_user@$target_server" "tmux kill-session -t vpn-proxy"
-  fi
+#  # stop previous uvicorn process if any service is running can be found in process list
+#  if ssh "$target_user@$target_server" "ps -ef | grep uvicorn | grep -v grep"; then
+#    echo "stopping previous uvicorn process"
+#    ssh "$target_user@$target_server" "pkill -f uvicorn"
+#  fi
+#
+#  # close tmux session if any session is exist
+#  if ssh "$target_user@$target_server" "tmux ls | grep vpn-proxy"; then
+#    echo "closing previous tmux session"
+#    ssh "$target_user@$target_server" "tmux kill-session -t vpn-proxy"
+#  fi
 
   # create tmux session and execute run fastapi service command
   ssh "$target_user@$target_server" "tmux new-session -d -s vpn-proxy 'cd $target_path && source venv/bin/activate && uvicorn web_apis:app --host 0.0.0.0 --port 8080 --workers 4'"
